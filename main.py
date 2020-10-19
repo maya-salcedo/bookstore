@@ -33,7 +33,7 @@ t3.grid(row=3, column=0)
 Label(window, text="kilogram").grid(row=0, column=1)
 Label(window, text="gram").grid(row=1, column=1)
 Label(window, text="pounds").grid(row=2, column=1)
-Label(window, text="gram").grid(row=3, column=1)
+Label(window, text="ounces").grid(row=3, column=1)
 
 # Should be always on the end of the code:
 window.mainloop()
