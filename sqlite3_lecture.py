@@ -1,4 +1,4 @@
-import psycopg2   # lib needs to be installed
+import sqlite3
 
 def create_table():
     conn = sqlite3.connect("lite.db") #if no db file yet, this code will create it
