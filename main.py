@@ -1,48 +1,63 @@
-import psycopg2   # lib needs to be installed
+#This is FRONTEND
 
-def create_table():
-    conn = psycopg2.connect("dbname='database1' user='postgres' password='postgresql12' host='localhost' port='5432'")
-    cur = conn.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS store (item TEXT, quantity INTEGER, price REAL)")
-    # CREATE TABLE store -- this code can be used if a db file is not existing
-    conn.commit()
-    conn.close()
+"""
+A program that stores this boook information
+Title, Author
+Year, ISBN
 
-def insert(item, quantity, price):
-    conn = psycopg2.connect("dbname='database1' user='postgres' password='postgresql12' host='localhost' port='5432'")
-    cur = conn.cursor()
-    #cur.execute("INSERT INTO store VALUES('%s','%s','%s')" % (item, quantity, price)) -- to avoid sql injections, pass the parameter.
-    cur.execute("INSERT INTO store VALUES(%s,%s,%s)", (item, quantity, price)) #dont use '', just pass the parameter
-    conn.commit()
-    conn.close()
+User can:
+View all records
+Search an entry
+Add entry
+Update entry
+Delete
+Close
+"""
 
-# insert("Coffee Cup", 10, 5) # remember that the string is between str quotes
+from tkinter import *
+import backend
 
-def view():
-    conn = psycopg2.connect("dbname='database1' user='postgres' password='postgresql12' host='localhost' port='5432'")
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM store")
-    rows = cur.fetchall() # to get all the data
-    conn.close()
-    return rows
+def view_command():
+    list1.delete(0, END) # this code will the stop the view button from reloading again the same data
+    for row in backend.view():
+        list1.insert(END, row) # this means that after the row, a new row is added to the list1 or Listbox
 
-def delete(item):
-    conn = psycopg2.connect("dbname='database1' user='postgres' password='postgresql12' host='localhost' port='5432'")
-    cur = conn.cursor()
-    cur.execute("DELETE FROM store WHERE item=%s", (item,)) # Note the comma after the parameter
-    conn.commit()
-    conn.close()
+def search_command():
+    list1.delete #to empty the listbox
 
-def update(quantity, price,item):
-    conn = psycopg2.connect("dbname='database1' user='postgres' password='postgresql12' host='localhost' port='5432'")
-    cur = conn.cursor()
-    cur.execute("UPDATE store SET quantity=%s, price=%s WHERE item=%s", (quantity, price, item))
-    conn.commit()
-    conn.close()
 
-#update(11, 6, "Water Glass")
-update(20, 15, "Apple")
-print(view())
 
-#create_table()
-#insert('Apple', 10, 15)
+window = Tk()
+
+title_text = StringVar()
+t1 = Entry(window, textvariable=title_text).grid(row=0, column=1)
+year_text = StringVar()
+t2 = Entry(window, textvariable=year_text).grid(row=1, column=1)
+author_text = StringVar()
+t3 = Entry(window, textvariable= author_text).grid(row=0, column=3)
+isbn_text = StringVar()
+t4 = Entry(window, textvariable=isbn_text).grid(row=1, column=3)
+
+list1 = Listbox(window, height=6, width=35)
+list1.grid(row=2, column=0, rowspan=6, columnspan=2)
+
+sb1 = Scrollbar(window)
+sb1.grid(row=2, column=2, rowspan=6)
+
+list1.configure(yscrollcommand=sb1.set)
+sb1.configure(command=list1.yview)
+
+l1 = Label(window, text="Title").grid(row=0, column=0)
+l2 = Label(window, text="Year").grid(row=1, column=0)
+l3 = Label(window, text="Author").grid(row=0, column=2)
+l4 = Label(window, text="ISBN").grid(row=1, column=2)
+
+b1 = Button(window, text="View All", width=12, command=view_command).grid(row=2, column=3)
+b2 = Button(window, text="Search Entry", width=12, command=search_command).grid(row=3, column=3)
+b3 = Button(window, text="Add Entry", width=12).grid(row=4, column=3)
+b4 = Button(window, text="Update", width=12).grid(row=5, column=3)
+b5 = Button(window, text="Delete", width=12).grid(row=6, column=3)
+b6 = Button(window, text="Close", width=12).grid(row=7, column=3)
+
+window.mainloop()
+
