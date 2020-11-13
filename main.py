@@ -35,30 +35,35 @@ def get_selected_row(event):
     except IndexError:
         pass
 
-def view_command():
-    list1.delete(0, END) # this code will the stop the view button from reloading again the same data
-    for row in database.view():
-        list1.insert(END, row) # this means that after the row, a new row is added to the list1 or Listbox
+class Command:
 
-def search_command():
-    list1.delete(0, END) #to empty the listbox
-    for row in database.search(title_text.get(), author_text.get(), year_text.get(), isbn_text.get()): # .get() will produce a string
-        list1.insert(END, row)
+    def __init__(self):
+        self.database = Database("books.db")
 
-def add_command():
-    database.insert(title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
-    list1.delete(0, END)
-    list1.insert(END, (title_text.get(), author_text.get(), year_text.get(), isbn_text.get()))
-    view_command()
+    def view_command(self):
+        list1.delete(0, END) # this code will the stop the view button from reloading again the same data
+        for row in database.view():
+            list1.insert(END, row) # this means that after the row, a new row is added to the list1 or Listbox
+
+    def search_command(self):
+        list1.delete(0, END) #to empty the listbox
+        for row in database.search(title_text.get(), author_text.get(), year_text.get(), isbn_text.get()): # .get() will produce a string
+            list1.insert(END, row)
+
+    def add_command(self):
+        database.insert(title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
+        list1.delete(0, END)
+        list1.insert(END, (title_text.get(), author_text.get(), year_text.get(), isbn_text.get()))
+        view_command()
 
 
-def delete_command():
-    database.delete(selected_tuple[0])
-    view_command()
+    def delete_command(self):
+        database.delete(selected_tuple[0])
+        view_command()
 
-def update_command():
-    database.update(selected_tuple[0], title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
-    view_command()
+    def update_command(self):
+        database.update(selected_tuple[0], title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
+        view_command()
 
 
 
